@@ -7,9 +7,9 @@ class OrdersController < ApplicationController
   def create
     charge = perform_stripe_charge
     order  = create_order(charge)
-
+    
     if order.valid?
-      empty_cart!
+      empty_cart!      
       redirect_to order, notice: 'Your Order has been placed.'
     else
       redirect_to cart_path, flash: { error: order.errors.full_messages.first }
@@ -18,6 +18,8 @@ class OrdersController < ApplicationController
   rescue Stripe::CardError => e
     redirect_to cart_path, flash: { error: e.message }
   end
+
+
 
   private
 
@@ -53,7 +55,9 @@ class OrdersController < ApplicationController
       )
     end
     order.save!
+    ApplicationMailer.order_email(current_user, order).deliver
     order
   end
 
 end
+

@@ -37,23 +37,34 @@
             <% @reviews.reverse.each do |review| %>
               <tr>
                 <td>
-                <%= review.description %>
+                  <%= review.description %>
                 </td>
                 <td>
-                <%= review.rating %>
+                  <%= review.rating %>
                 </td>
                 <td>
-                <%= review.created_at %>
+                  <%= review.created_at %>
+                </td>
+                <td>
+                  <% if current_user.id == review.user_id %>
+                    <%= link_to fa_icon('trash'), review, class: 'btn btn-sm btn-danger', method: :delete, data: { confirm: "Are you sure?" } %>
+                  <% end %>
                 </td>
               </tr>
             <% end %>
           </tbody>
         </table>
-        <%= form_for [@product, @reviews.build] do |f| %>
-          Rating : <%= f.select :rating, options_for_select([1,2,3,4,5]) %><br />
-          Review : <%= f.text_area :description, class: 'form-control' %>
-          <%= f.submit %>
+
+        <% if current_user != nil %>
+
+          <%= form_for [@product, @reviews.build] do |f| %>
+            Rating : <%= f.select :rating, options_for_select([1,2,3,4,5]) %><br />
+            Review : <%= f.text_area :description, class: 'form-control' %>
+            <%= f.submit %>
+          <% end %>
+    
         <% end %>
+     
 
       </div>
     </div>

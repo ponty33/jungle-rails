@@ -18,4 +18,11 @@ class ReviewsController < ApplicationController
     )
   end
 
+  def destroy
+    @review = Review.find params[:id]
+    @review.destroy
+    product = @review.product
+    redirect_to product
+  end
+
 end

@@ -24,6 +24,38 @@
           <dd><%= @product.price %></dd>
         </dl>
       </div>
+      <div>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Review</th>
+              <th>Rating</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @reviews.reverse.each do |review| %>
+              <tr>
+                <td>
+                <%= review.description %>
+                </td>
+                <td>
+                <%= review.rating %>
+                </td>
+                <td>
+                <%= review.created_at %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= form_for [@product, @reviews.build] do |f| %>
+          Rating : <%= f.select :rating, options_for_select([1,2,3,4,5]) %><br />
+          Review : <%= f.text_area :description, class: 'form-control' %>
+          <%= f.submit %>
+        <% end %>
+
+      </div>
     </div>
 
   </article>

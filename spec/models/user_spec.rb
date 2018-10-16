@@ -32,6 +32,41 @@ RSpec.describe User, type: :model do
 
 
   end
+
+  describe '.authenticate_with_credentials' do
+    # examples for this class method here
+    it 'should be valid if all field are included' do
+      user1 = User.create(name: 'name', email: 'abc@abc.com', password: 'abcdefgh', password_confirmation: 'abcdefgh')
+      user = User.authenticate_with_credentials(user1.email, user1.password)
+      expect(user).to be_a(User)
+    end
+
+    it 'should be invalid if no email' do
+      user1 = User.create(name: 'name', email: 'abc@abc.com', password: 'abcdefgh', password_confirmation: 'abcdefgh')
+      user = User.authenticate_with_credentials(nil, user1.password)
+      expect(user).to be_nil
+    end
+
+    it 'should be invalid if no password' do
+      user1 = User.create(name: 'name', email: 'abc@abc.com', password: 'abcdefgh', password_confirmation: 'abcdefgh')
+      user = User.authenticate_with_credentials(user1.email, nil)
+      expect(user).to be_nil
+    end
+
+    it 'should be valid if leading and trailing space included in email' do
+      user1 = User.create(name: 'name', email: 'abc@abc.com', password: 'abcdefgh', password_confirmation: 'abcdefgh')
+      user = User.authenticate_with_credentials(' abc@abc.com ', user1.password)
+      expect(user).to be_a(User)
+    end
+
+    it 'should be valid if leading and trailing space included in email' do
+      user1 = User.create(name: 'name', email: 'abc@abc.com', password: 'abcdefgh', password_confirmation: 'abcdefgh')
+      user = User.authenticate_with_credentials('ABC@ABC.com', user1.password)
+      expect(user).to be_a(User)
+    end
+
+  end
+
 end
 
 
